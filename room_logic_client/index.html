@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="join">join</button>
+    <div id="messages"></div>
+    <input id="input" type="text">
+    <button id="send">send</button>
+</body>
+<script>
+    const join=document.getElementById('join')
+    const messages=document.getElementById("messages")
+    const input=document.getElementById("input")
+    const send=document.getElementById("send")
+    
+    join.addEventListener('click',handlejoin)
+    send.addEventListener('click',handleSend)
+
+    const ws=new WebSocket('ws://localhost:3000')
+
+    function handlejoin(e){
+        ws.send(JSON.stringify({type:'join',room:'myRoom'}))
+    }
+
+    function handleSend(e){
+        console.log(JSON.stringify({type:"msg",payload:input.value}))
+        ws.send(JSON.stringify({type:"msg",payload:input.value}))
+        input.value=""
+    }
+
+    ws.onmessage=function(event){
+        if(event.data==='joined'){
+            console.log("joined room")
+        }
+        else{
+            const p=document.createElement('p')
+            p.innerText=event.data
+            messages.appendChild(p)
+
+        }
+    }
+</script>
+</html>

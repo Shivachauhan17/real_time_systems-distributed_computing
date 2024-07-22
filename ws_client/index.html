@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>here me are making a webSocket connection</h1>
+    <div id="messages">
+        <input type="text" id="input">
+        <button id="button">send</button>
+    </div>
+    <script>
+        const child=document.getElementById("input")
+        const button=document.getElementById('button')
+        button.addEventListener('click',()=>{
+            
+            wss.send(child.value)
+            child.value=""
+        })
+        const parent=child.parentNode
+
+        const wss=new WebSocket('ws://localhost:3000')
+        wss.onopen=function(){
+            console.log("connected to web Scoket server")
+            const p=document.createElement('h2')
+            p.innerText="connected to web Socket server"
+            parent.appendChild(p)
+        }
+
+        wss.onmessage=function(event){
+            const newElem=document.createElement('p')
+            newElem.innerText=event.data
+            parent.insertBefore(newElem,child)
+        }
+
+    </script>
+</body>
+</html>

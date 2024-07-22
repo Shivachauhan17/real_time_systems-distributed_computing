@@ -31,3 +31,6 @@ app.get("/health", (req, res) => {
 server.listen(3000, () => {
     console.log("wen Socket server has been started");
 });
+server.on('error', (error) => {
+    console.error(`Server error: ${error.message}`);
+});
